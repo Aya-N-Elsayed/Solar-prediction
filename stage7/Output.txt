@@ -1,0 +1,54 @@
+RF training on PWS (48246, 15) testing on  (20678, 15)
+           fitting time 1.254645824432373
+           r2 score for train data: 0.9994813344736998
+           r2 score for test data: 0.9961885652982396
+           RMSE score for train data: 6.467018399213223
+           RMSE score for test data: 17.563285720803954
+           MAE  score for train data: 4.108331861225117
+           MAE  score for test data: 11.188739320556929
+
+D_tree training on PWS (48246, 15) testing on  (20678, 15)
+           fitting time 0.002992391586303711
+           r2 score for train data: 0.9971264306564813
+           r2 score for test data: 0.9943662974787738
+           RMSE score for train data: 15.221983466859216
+           RMSE score for test data: 21.35297935448048
+           MAE  score for train data: 9.145018659710875
+           MAE  score for test data: 13.84760183941253
+
+svr training on PWS (48246, 15) testing on  (20678, 15)
+           fitting time 10.256577491760254
+           r2 score for train data: 0.9926316908524427
+           r2 score for test data: 0.9924949368641253
+           RMSE score for train data: 24.374983170441023
+           RMSE score for test data: 24.64556050925553
+           MAE  score for train data: 14.548666263383256
+           MAE  score for test data: 14.755246639313306
+
+BR training on PWS (48246, 15) testing on  (20678, 15)
+           fitting time 0.0009984970092773438
+           r2 score for train data: 0.993778394053515
+           r2 score for test data: 0.993677733322665
+           RMSE score for train data: 22.398124561536896
+           RMSE score for test data: 22.62027758133439
+           MAE  score for train data: 17.41284930441669
+           MAE  score for test data: 17.63606085572272
+
+LR training on PWS (48246, 15) testing on  (20678, 15)
+           fitting time 0.000995635986328125
+           r2 score for train data: 0.9937783940591713
+           r2 score for test data: 0.9936777309804098
+           RMSE score for train data: 22.398124551355124
+           RMSE score for test data: 22.620281771481565
+           MAE  score for train data: 17.412751001181487
+           MAE  score for test data: 17.63596300060147
+
+MLP training on PWS (48246, 15) testing on  (20678, 15)
+           fitting time 0.24933266639709473
+           r2 score for train data: 0.9986873626767846
+           r2 score for test data: 0.9946597380884145
+           RMSE score for train data: 10.28804320404234
+           RMSE score for test data: 20.789440590547912
+           MAE  score for train data: 6.8705664981568155
+           MAE  score for test data: 14.285792963507008
+
