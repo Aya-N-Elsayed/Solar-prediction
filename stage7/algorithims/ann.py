@@ -6,12 +6,14 @@ def model():
     # create model
     model = Sequential()
     model.add(Conv1D(filters=256, kernel_size=5, activation='relu', input_shape=(15,1)))
-    # model.add(Conv1D(filters=256, kernel_size=5, activation='relu'))
-    # model.add(Conv1D(filters=256, kernel_size=5, activation='relu'))
+    # model.add(MaxPooling1D(pool_size=2, strides=None, padding='valid', data_format='channels_last'))
+    model.add(Conv1D(filters=256, kernel_size=5, activation='relu'))
+    model.add(Conv1D(filters=256, kernel_size=5, activation='relu'))
 
     
     model.add(Flatten())
-    model.add(Dense(20, kernel_initializer='normal', activation='relu'))
+    model.add(Dense(13, kernel_initializer='normal', activation='relu'))
+    # model.add(Dense(20, kernel_initializer='normal', activation='relu'))
     model.add(Dense(1, kernel_initializer='normal'))
     # Compile model
     model.compile(loss='mean_squared_error', optimizer='adam')
@@ -57,7 +59,7 @@ if __name__ == "__main__":
 
     model = model()
     model.summary()
-    model.fit(X_train, y_train, batch_size=12,epochs=200, verbose=0)
+    model.fit(X_train, y_train, batch_size=12,epochs=500, verbose=0)
 
     ypred = model.predict(X_test)
     ypred_train = model.predict(X_train)
