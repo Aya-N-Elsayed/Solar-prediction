@@ -1,52 +1,85 @@
-import numpy as np
-from keras.layers import Dense, Activation
-from keras.models import Sequential
-from sklearn.model_selection import train_test_split
-import matplotlib.pyplot as plt
-# Importing the dataset
-dataset = np.genfromtxt("../cleaned_data/C_PWS.csv", delimiter='')
-# X = dataset[:, :-1]
-# y = dataset[:, -1]
-X = data .iloc[:, 0:(data.shape[1]-1)].values
-y = data .iloc[:, -1].values
+from  lib import *
 
 
-# Splitting the dataset into the Training set and Test set
-# X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.08, random_state = 0)
-X_train,X_test,y_train, y_test = train_test_split(x,y, test_size=0.3, random_state=1)
-# Feature Scaling
-from sklearn.preprocessing import StandardScaler
-sc = StandardScaler()
-X_train = sc.fit_transform(X_train)
-X_test = sc.transform(X_test)
+# define base model
+def model():
+    # create model
+    model = Sequential()
+    model.add(Conv1D(filters=256, kernel_size=5, activation='relu', input_shape=(15,1)))
+    # model.add(Conv1D(filters=256, kernel_size=5, activation='relu'))
+    # model.add(Conv1D(filters=256, kernel_size=5, activation='relu'))
 
-# Initialising the ANN
-model = Sequential()
+    
+    model.add(Flatten())
+    model.add(Dense(20, kernel_initializer='normal', activation='relu'))
+    model.add(Dense(1, kernel_initializer='normal'))
+    # Compile model
+    model.compile(loss='mean_squared_error', optimizer='adam')
+    return model
 
-# Adding the input layer and the first hidden layer
-model.add(Dense(32, activation = 'relu', input_dim = 6))
+if __name__ == "__main__":
 
-# Adding the second hidden layer
-model.add(Dense(units = 32, activation = 'relu'))
+    arguments = argparse.ArgumentParser()
+    arguments.add_argument('--dataset',type=str,help='dataset name')
+    arguments.add_argument('--teston',type=str,help='teston')
+    arguments.add_argument('--randtest',type=str,help='for random testing enter 1')
+    args = arguments.parse_args()
+    dataset = args.dataset
+    rand_test = args.randtest
+    teston = args.teston
+    # Loading our data set
+    os.chdir("..")
+    script_path = os.path.abspath("cleaned_data")
+    # print(script_path )
+    dataset = os.path.join(script_path,dataset)
+    data = pd.read_csv(dataset)
+    X = data .iloc[:, 1:(data.shape[1]-1)].values
+    Y = data .iloc[:, -1].values
+    
+    X = np.asarray(X).astype(np.float32)
+    Y = np.asarray(Y).astype(np.float32)
+    X = X.reshape(X.shape[0], X.shape[1], 1)
 
-# Adding the third hidden layer
-model.add(Dense(units = 32, activation = 'relu'))
+      # Splitting data into 70% training and 30% test data:
+    if rand_test == '1':
+        X_train,X_test,y_train, y_test = train_test_split(X,Y, test_size=0.3, random_state=1)
+        test_on = ''
+    else:    
+        dataTs = os.path.join(script_path,teston)
+        dataTs = pd.read_csv( dataTs)
+        X_train = X
+        X_test = dataTs .iloc[:, 0:(data.shape[1]-1)].values
+        y_train = Y
+        y_test = dataTs .iloc[:, -1].values
+        print(x.shape, y.shape ,X_train.shape, X_test.shape, y_train.shape, y_test.shape)
+        test = teston.split("_")[1]
+        test_on = test.split(".")[0]
 
-# Adding the output layer
+    model = model()
+    model.summary()
+    model.fit(X_train, y_train, batch_size=12,epochs=200, verbose=0)
 
-model.add(Dense(units = 1))
+    ypred = model.predict(X_test)
+    ypred_train = model.predict(X_train)
+    print(model.evaluate(X_train, y_train))
+    print("MSE: %.4f" % mean_squared_error(y_test, ypred))
+    print("MAE: %.4f" % mean_absolute_error(y_train, ypred_train))
+    print("r2: %.4f" % r2_score(y_true=y_train, y_pred=ypred_train))
+    
 
-#model.add(Dense(1))
-# Compiling the ANN
-model.compile(optimizer = 'adam', loss = 'mean_squared_error')
+    x_ax = range(len(ypred))
+    plt.scatter(x_ax, y_test, s=5, color="blue", label="original")
+    plt.plot(x_ax, ypred, lw=0.8, color="red", label="predicted")
+    plt.legend()
+    plt.show()
 
-# Fitting the ANN to the Training set
-model.fit(X_train, y_train, batch_size = 10, epochs = 100)
 
-y_pred = model.predict(X_test)
-
-plt.plot(y_test, color = 'red', label = 'Real data')
-plt.plot(y_pred, color = 'blue', label = 'Predicted data')
-plt.title('Prediction')
-plt.legend()
-plt.show()
+    with open('Output_ann.txt', 'w') as f:
+        with redirect_stdout(f):
+            model.summary()
+    
+    text_file = open("Output_ann.txt", "a")
+    text_file.write("MSE: %.4f" % mean_squared_error(y_test, ypred) + "\n")
+    text_file.write("MAE: %.4f" % mean_absolute_error(y_train, ypred_train) + "\n")
+    text_file.write("r2: %.4f" % r2_score(y_true=y_train, y_pred=ypred_train))
+    text_file.close()
