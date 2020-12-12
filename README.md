@@ -4,13 +4,11 @@ Given a timestamped weather data, including wind, temperature, humidity, and pre
 
 ### How to run
 ###### To run the code for regression algorithms in the small data (1000 instances)
-Run this command
 ```
 python3 main.py --dataset C_PWS_1.csv --teston " " --randtest 1
 ```
 
 ###### To run the CNN model in the small data (1000 instances)
-Run this command
 ```
 python3 ann.py --dataset C_PWS_1.csv --teston " " --randtest 1
 ```
