@@ -1,6 +1,6 @@
 ## Investigating the best regression model for solar radiation prediction
 
-Given a timestamped weather data, including wind, temperature, humidity, and pressure, and given historical solar radiation data, we can find a relation between weather features and solar radiation. According to that, we can predict solar radiation for the future according to the weather. We applied different regression algorithms and models to find the best regression model to predict solar radiation.
+Given a timestamped weather data, including wind, temperature, humidity, and pressure, and given historical solar radiation data, we can find a relation between weather features and solar radiation. According to that, we can predict solar radiation for the future according to the weather. We applied different regression algorithms and models to find the best regression model to predict solar radiation. The algorithm tested are Random Forest Regression, Decision Tree Regression, Support Vector Regression, Linear Regression, and Neural Network Multilayer Perceptron Regression. Also, we tried several CNN architectures. Hyperparameters Tuning is applied to increase the accuracy of the results from the algorithms tested.
 
 ### How to run
 ###### To run the code for regression algorithms in the small data (1000 instances)
