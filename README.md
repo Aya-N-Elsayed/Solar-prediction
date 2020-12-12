@@ -13,3 +13,5 @@ python3 main.py --dataset C_PWS_1.csv --teston " " --randtest 1
 python3 ann.py --dataset C_PWS_1.csv --teston " " --randtest 1
 ```
 To run on large data (68925), change the data file in the command line to C_PWS.csv
+
+You should run the commands from the path "./Solar-prediction/stage7/algorithms"
