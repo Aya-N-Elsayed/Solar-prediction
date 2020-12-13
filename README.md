@@ -15,3 +15,20 @@ python3 ann.py --dataset C_PWS_1.csv --teston " " --randtest 1
 To run on large data (68925), change the data file in the command line to C_PWS.csv
 
 You should run the commands from the path "./Solar-prediction/stage7/algorithms"
+###### To run the hyperparameter tuning for random forest in the small data (1000 instances)
+```
+python3 rf_hyper.py --dataset C_PWS_1000.csv
+```
+###### To run the hyperparameter tuning for support vector in the small data (1000 instances)
+```
+python3 svr_hyper.py
+```
+###### To run the hyperparameter tuning for random forest in the large data (68925 instances)
+```
+python3 rf_hyper.py --dataset C_PWS.csv
+```
+###### To run Box plot for evaluation metrics for both large and small data
+ ```
+python3 boxplot.py
+```
+You should run the commands from the path "./Solar-prediction/Hyperparameters/"

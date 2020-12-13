@@ -7,9 +7,14 @@ from sklearn.metrics import mean_squared_error#RMSE
 from sklearn.metrics import r2_score
 from sklearn.metrics import mean_absolute_error#MAE
 from sklearn.preprocessing import StandardScaler
+import argparse
 rf = RandomForestRegressor()
 # reading dataset
-data = pd.read_csv("C_PWS.csv")
+arguments = argparse.ArgumentParser()
+arguments.add_argument('--dataset',type=str,help='dataset name')
+args = arguments.parse_args()
+dataset = args.dataset
+data = pd.read_csv(dataset)
 print(data.shape)
 x = data .iloc[:, 1:(data.shape[1]-1)].values
 y = data .iloc[:, -1].values 
