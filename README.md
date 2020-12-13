@@ -31,4 +31,8 @@ python3 rf_hyper.py --dataset C_PWS.csv
  ```
 python3 boxplot.py
 ```
+###### To run Box plot for hyperparameter tuning for both large and small data
+ ```
+python3 boxplot_hyper.py
+```
 You should run the commands from the path "./Solar-prediction/Hyperparameters/"
