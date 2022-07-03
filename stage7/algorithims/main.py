@@ -23,19 +23,45 @@ if __name__ == "__main__":
     y = data .iloc[:, -1].values
 
     # Splitting data into 70% training and 30% test data:
-    if rand_test == '1':
+    if rand_test == '1': # 70 30 same station 
         X_train,X_test,y_train, y_test = train_test_split(x,y, test_size=0.3, random_state=1)
         test_on = ''
-    else:    
+    elif rand_test == '11':    #70 30
+        X_train, _ ,y_train, _ = train_test_split(x,y, test_size=0.3, random_state=1)
         dataTs = os.path.join(script_path,teston)
         dataTs = pd.read_csv( dataTs)
-        X_train = x
-        X_test = dataTs .iloc[:, 0:(data.shape[1]-1)].values
-        y_train = y
-        y_test = dataTs .iloc[:, -1].values
+        xTs = dataTs .iloc[:, 0:(dataTs.shape[1]-1)].values
+        yTs = dataTs .iloc[:, -1].values
+        _,X_test,_, y_test = train_test_split(xTs,yTs, test_size=0.3, random_state=1)
         print(x.shape, y.shape ,X_train.shape, X_test.shape, y_train.shape, y_test.shape)
         test = teston.split("_")[1]
         test_on = test.split(".")[0]
+        
+    elif rand_test == '01':    #100 30
+        X_train = x
+        y_train = y 
+        dataTs = os.path.join(script_path,teston)
+        dataTs = pd.read_csv( dataTs)
+        xTs = dataTs .iloc[:, 0:(dataTs.shape[1]-1)].values
+        yTs = dataTs .iloc[:, -1].values
+        _,X_test,_, y_test = train_test_split(xTs,yTs, test_size=0.3, random_state=1)
+        print(x.shape, y.shape ,X_train.shape, X_test.shape, y_train.shape, y_test.shape)
+        test = teston.split("_")[1]
+        test_on = test.split(".")[0]
+
+    elif rand_test == '00':    #100 100
+        X_train = x
+        y_train = y 
+        dataTs = os.path.join(script_path,teston)
+        dataTs = pd.read_csv( dataTs)
+        xTs = dataTs .iloc[:, 0:(dataTs.shape[1]-1)].values
+        yTs = dataTs .iloc[:, -1].values
+        X_test = xTs 
+        y_test = yTs
+        print(x.shape, y.shape ,X_train.shape, X_test.shape, y_train.shape, y_test.shape)
+        test = teston.split("_")[1]
+        test_on = test.split(".")[0]
+        
 
     # Standardizing the features:
     time_plt = X_test[:,0]
@@ -49,6 +75,9 @@ if __name__ == "__main__":
     train = args.dataset.split("_")[1]
     train_on = train.split(".")[0]
 
+    reg_ann = regressors('ann',X_train,X_test , y_train , y_test, train_on,test_on)
+    annts_time,anny_train_pred,anny_test_pred = reg_ann.run_regressor()
+    reg_ann.metrics(anny_train_pred,anny_test_pred,annts_time)
 
     reg_RF = regressors('RF',X_train,X_test , y_train , y_test, train_on,test_on)
     RFts_time,RFy_train_pred,RFy_test_pred = reg_RF.run_regressor()
@@ -69,28 +98,29 @@ if __name__ == "__main__":
     reg_LR = regressors('LR',X_train,X_test , y_train , y_test, train_on,test_on)
     LRts_time,LRy_train_pred,LRy_test_pred = reg_LR.run_regressor()
     reg_LR.metrics(LRy_train_pred,LRy_test_pred,LRts_time)
-   
+    '''
     reg_MPL = regressors('MLP',X_train,X_test , y_train , y_test, train_on,test_on)
     MPLts_time,MPLy_train_pred,MPLy_test_pred = reg_MPL.run_regressor()
     reg_MPL.metrics(MPLy_train_pred,MPLy_test_pred,MPLts_time)
-    
+    ''' 
     #save result into csv file
     col_names = ['time','y_test','TREEy_test_pred','RFy_test_pred','SVMy_test_pred','BRy_test_pred',
-    'LRy_test_pred','MPLy_test_pred']
-    test_time = np.array([0,0,TREEts_time,RFts_time,SVMts_time,BRts_time,LRts_time,MPLts_time])
+    'LRy_test_pred','cnn_y_test_pred']
+    test_time = np.array([0,0,TREEts_time,RFts_time,SVMts_time,BRts_time,LRts_time,annts_time])
     print(test_time.shape)
     temp = pd.DataFrame(data=time_plt, columns=["date"])
     time_plt = (temp.date.str.split(":00-0",expand=True))[0]
     time_plt = time_plt.str.replace("T",' ')
     results = np.array([time_plt,y_test,TREEy_test_pred,RFy_test_pred
-    ,SVMy_test_pred,BRy_test_pred,LRy_test_pred,MPLy_test_pred ])
+    ,SVMy_test_pred,BRy_test_pred,LRy_test_pred,np.squeeze(anny_test_pred) ])
     results = np.transpose(results)
     print(results.shape)
     results = np.insert(results, 0,test_time, axis=0)
     print(results.shape)
     print(results)
-
+    now = datetime.now()
+    dt_string = now.strftime("%d%m%Y%H%M")
     #results = np.insert(results, 0,col_names, 0) 
     results_ = pd.DataFrame(data = results,columns=col_names)
-    results_.to_csv("TR"+train_on+"TS"+teston, index=False)
+    results_.to_csv("TR"+train_on+"TS"+teston+dt_string,index=False)
     
